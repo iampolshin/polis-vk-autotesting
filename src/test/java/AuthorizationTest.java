@@ -10,6 +10,7 @@ import java.util.Properties;
 import static matcher.IsPositiveInteger.isAPositiveInteger;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.fail;
 
 public class AuthorizationTest {
@@ -32,8 +33,13 @@ public class AuthorizationTest {
     }
 
     @Test
-    public void hasMessages() {
+    public void hasMessagesCustom() {
         assertThat(MAIN_PAGE.getMessageCount(), isAPositiveInteger());
+    }
+
+    @Test
+    public void hasMessages() {
+        assertThat(MAIN_PAGE.getMessageCount(), greaterThan(0));
     }
 
     // Проверяет, есть ли на странице рекомендация "Идеи дня"
