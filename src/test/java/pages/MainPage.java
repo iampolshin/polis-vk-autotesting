@@ -9,9 +9,12 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class MainPage extends LoadableComponent<MainPage> {
     private static final SelenideElement MAIN_NAV = $x("//div[@id='hook_Block_SideNavigation']");
+    private static final SelenideElement SEARCH_BAR = $x("//input[@placeholder='Искать на сайте']");
     private static final SelenideElement MSG_COUNT = $x("//div[@id='counter_ToolbarMessages']/div");
-
     private static final SelenideElement IDEAS = $x("//*[@class='portlet_h_name_t __multiline']");
+    private static final SelenideElement SETTINGS_BTN = $x("//*[@class='ucard-mini_cnt']");
+    private static final SelenideElement LOGOUT_LINK = $x(".//*[@class='lp']");
+    private static final SelenideElement LOGOUT_BTN = $x(".//*[@class='button-pro form-actions_yes']");
 
     @Override
     protected void load() {
@@ -28,10 +31,23 @@ public class MainPage extends LoadableComponent<MainPage> {
     }
 
     public int getMessageCount() {
-        return Integer.parseInt($(MSG_COUNT).text());
+        String messageCount = $(MSG_COUNT).text();
+        return Integer.parseInt(messageCount.isBlank() ? String.valueOf(0) : messageCount);
     }
 
-    public String getIdeas(){
+    public String getIdeas() {
         return $(IDEAS).text();
+    }
+
+    public SearchPage search(String text) {
+        $(SEARCH_BAR).setValue(text);
+        $(SEARCH_BAR).pressEnter();
+        return new SearchPage();
+    }
+
+    public void logout() {
+        $(SETTINGS_BTN).click();
+        $(LOGOUT_LINK).shouldBe(Condition.visible).click();
+        $(LOGOUT_BTN).shouldBe(Condition.visible).click();
     }
 }

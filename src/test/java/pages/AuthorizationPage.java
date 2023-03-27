@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Selenide.open;
 
 public class AuthorizationPage extends LoadableComponent<AuthorizationPage> {
-    private final static String PAGE_URL = "https://ok.ru/";
+    private static final String PAGE_URL = "https://ok.ru/";
     private static final SelenideElement LOGIN_FIELD = $x("//*[@id='field_email']");
     private static final SelenideElement PASS_FIELD = $x("//*[@id='field_password']");
     private static final SelenideElement AUTH_BTN = $x("//div[@class='login-form-actions']/input");
