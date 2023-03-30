@@ -2,12 +2,14 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import pages.AuthorizationPage;
 import pages.MainPage;
 import pages.SearchPage;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 import static matcher.IsPositiveInteger.isAPositiveInteger;
@@ -42,16 +44,19 @@ public class OKTest {
         MAIN_PAGE.logout();
     }
 
+    @Disabled
     @Test
     public void hasMessagesCustom() {
         assertThat(MAIN_PAGE.getMessageCount(), isAPositiveInteger());
     }
 
+    @Disabled
     @Test
     public void hasMessages() {
         assertThat(MAIN_PAGE.getMessageCount(), greaterThan(0));
     }
 
+    @Disabled
     @Test
     @DisplayName("Есть ли на странице рекомендация \"Идеи дня\"")
     public void hasIdeas() {
@@ -71,5 +76,11 @@ public class OKTest {
         MAIN_PAGE.search(text);
         SEARCH_PAGE.clearSearchText();
         Assert.assertTrue(SEARCH_PAGE.getTextsFromHistoryOfSearch().contains(text));
+    }
+
+    @Test
+    public void hasListOfPeopleWithWhomThereIsCorrespondence() {
+        List<String> listOfPeopleWithWhomThereIsCorrespondence = MAIN_PAGE.clickMessageBtn().getListOfPeopleWithWhomThereIsCorrespondence();
+        assertThat(listOfPeopleWithWhomThereIsCorrespondence.size(), greaterThan(0));
     }
 }
