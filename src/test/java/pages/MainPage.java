@@ -1,5 +1,6 @@
 package pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.support.ui.LoadableComponent;
 
@@ -16,44 +17,53 @@ public class MainPage extends LoadableComponent<MainPage> {
     private static final SelenideElement LOGOUT_LINK = $x(".//*[@class='lp']");
     private static final SelenideElement LOGOUT_BTN = $x(".//*[@class='button-pro form-actions_yes']");
     private static final SelenideElement MESSAGES_BTN = $x("//*[@class='toolbar_nav_i' and @data-l='t,messages']");
+    private static final Condition VISIBLE_CONDITION = visible.because("Нет элемента");
+
+    public MainPage() {
+        isLoaded();
+    }
+
+    public MainPage(String login, String password) {
+        AuthorizationPage authorizationPage = new AuthorizationPage();
+        authorizationPage.login(login, password);
+    }
 
     @Override
     protected void load() {
-
     }
 
     @Override
     protected void isLoaded() throws Error {
-        $(MAIN_NAV).shouldBe(visible);
+        $(MAIN_NAV).shouldBe(VISIBLE_CONDITION);
     }
 
     public boolean isAuthorized() {
-        return $(MAIN_NAV).has(visible);
+        return $(MAIN_NAV).has(VISIBLE_CONDITION);
     }
 
     public int getMessageCount() {
-        String messageCount = $(MSG_COUNT).text();
+        String messageCount = $(MSG_COUNT).shouldBe(VISIBLE_CONDITION).text();
         return Integer.parseInt(messageCount.isBlank() ? String.valueOf(0) : messageCount);
     }
 
     public String getIdeas() {
-        return $(IDEAS).text();
+        return $(IDEAS).shouldBe(VISIBLE_CONDITION).text();
     }
 
     public SearchPage search(String text) {
-        $(SEARCH_BAR).setValue(text);
-        $(SEARCH_BAR).pressEnter();
+        $(SEARCH_BAR).shouldBe(VISIBLE_CONDITION).setValue(text);
+        $(SEARCH_BAR).shouldBe(VISIBLE_CONDITION).pressEnter();
         return new SearchPage();
     }
 
-    public void logout() {
-        $(SETTINGS_BTN).click();
-        $(LOGOUT_LINK).shouldBe(visible).click();
-        $(LOGOUT_BTN).shouldBe(visible).click();
+    public AuthorizationPage logout() {
+        $(SETTINGS_BTN).shouldBe(VISIBLE_CONDITION).click();
+        $(LOGOUT_LINK).shouldBe(VISIBLE_CONDITION).click();
+        $(LOGOUT_BTN).shouldBe(VISIBLE_CONDITION).click();
+        return new AuthorizationPage();
     }
 
-    public MessagePage clickMessageBtn() {
-        $(MESSAGES_BTN).shouldBe(visible).click();
-        return new MessagePage();
+    public void clickMessageBtn() {
+        $(MESSAGES_BTN).shouldBe(VISIBLE_CONDITION).click();
     }
 }
